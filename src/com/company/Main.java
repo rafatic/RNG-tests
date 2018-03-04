@@ -6,7 +6,7 @@ public class Main {
 
     public static void main(String[] args) {
 	// write your code here
-        generator gen = new generator(12);
+        generator gen = new generator(System.currentTimeMillis());
         int nbHeads = 0;
 
         /*for(int i = 0; i < 10; i++)
@@ -22,23 +22,29 @@ public class Main {
 
         System.out.println("Prob : " + nbHeads);*/
 
-        testGenerator(gen);
+        //testGenerator(gen);
+
+        randomWalker walker = new randomWalker(100, 30, 'U', gen);
+
+        walker.beginWalk();
 
 
     }
 
     public static void testGenerator(generator gen)
     {
-        int[] lancers = new int[13];
+        int[] lancers = new int[4];
 
-        for(int i = 0; i < 1000; i++)
+        for(int i = 0; i < 10000; i++)
         {
-            lancers[(int)((gen.nextDouble() % 6 + 1 ) + (gen.nextDouble() % 6 + 1))]++;
+            lancers[(int)((gen.nextDouble() % 4))]++;
         }
 
-        for(int i = 2; i <13; i++)
+        for(int i = 0; i <4; i++)
         {
             System.out.println("[" + i + "] : " + lancers[i]);
         }
+
+
     }
 }
