@@ -22,6 +22,7 @@ public class guiManager {
     private BufferedImage image;
     randomWalker walker;
     private generator gen;
+    private int resultNbSteps = 0;
 
     public static int LINE_UP = 0;
     public static int LINE_RIGHT = 1;
@@ -55,6 +56,9 @@ public class guiManager {
                         public void run() {
 
                             printFromActionHistory();
+                            txtarea_results.setText(walker.toString());
+                            txtarea_results.repaint();
+
                         }
                     });
                 }
@@ -83,6 +87,8 @@ public class guiManager {
                         public void run() {
 
                             printFromActionHistory();
+                            txtarea_results.setText(walker.toString());
+                            txtarea_results.repaint();
                         }
                     });
                 }
@@ -111,6 +117,8 @@ public class guiManager {
                         public void run() {
                             printWalkFromMatrix();
                             //printFromActionHistory();
+                            txtarea_results.setText(walker.toString());
+                            txtarea_results.repaint();
                         }
                     });
                 }
@@ -139,6 +147,8 @@ public class guiManager {
                 image.setRGB(x, y, Color.LIGHT_GRAY.getRGB());
             }
         }
+
+
         frm.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frm.setLocationByPlatform(true);
         frm.pack();
@@ -201,6 +211,9 @@ public class guiManager {
             }
 
         }
+
+        txtarea_results.setText("");
+
     }
 
     private void printWalkFromMatrix()

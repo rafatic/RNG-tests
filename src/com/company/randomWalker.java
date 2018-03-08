@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 public class randomWalker {
     private char[][] matrix;
-    private int nbSteps;
+    private int nbSteps, nbEffectiveSteps;
     private int matrixSize;
 
     private int height, width;
@@ -64,6 +64,8 @@ public class randomWalker {
 
         currentPositionX = this.width / 2;
         currentPositionY = 0;
+
+
 
     }
 
@@ -132,6 +134,8 @@ public class randomWalker {
 
     public void beginWalk()
     {
+
+        nbEffectiveSteps = 0;
         if(mode == 'C')
         {
             classicWalk();
@@ -195,6 +199,9 @@ public class randomWalker {
 
 
         }
+
+        nbEffectiveSteps = nbSteps;
+
     }
 
     private void returnlessWalk()
@@ -241,6 +248,8 @@ public class randomWalker {
             lastHeading = heading;
 
         }
+        nbEffectiveSteps = nbSteps;
+
     }
 
     private void selfAvoidingWalk()
@@ -296,7 +305,6 @@ public class randomWalker {
                     System.out.println("ERROR SHOULDNT WALK THERE step "+ i);
                 }
 
-                //matrix[currentPositionX][currentPositionY] = 1;
 
             }
         }
@@ -305,6 +313,32 @@ public class randomWalker {
         {
             System.out.println("[ERROR] : self-avoiding walk stuck itself on step " + i);
         }
+        nbEffectiveSteps = i;
+    }
+
+    public String toString()
+    {
+        String str = "------------- RESULT ------------- \nMode : ";
+
+        if(mode == 'C')
+        {
+            str += "Classic Walk";
+        }
+        else if(mode == 'S')
+        {
+            str += "ReturnLess Walk";
+        }
+        else if(mode == 'U')
+        {
+            str += "Self avoiding Walk";
+        }
+
+        str += "\nRequired steps : " + nbSteps + "\n";
+        str += "Simulation ended after : " + nbEffectiveSteps + " steps";
+
+        return str;
+
+
     }
 
 

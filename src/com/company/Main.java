@@ -1,34 +1,15 @@
 package com.company;
 
-import javax.swing.*;
+
 import java.awt.*;
-import java.sql.SQLSyntaxErrorException;
 
 public class Main {
 
-    public static void main(String[] args) throws InterruptedException {
-	// write your code here
+    public static void main(String[] args) {
         generator gen = new generator(System.currentTimeMillis());
-        int nbHeads = 0;
-
-        /*for(int i = 0; i < 10; i++)
-        {
-            System.out.println((long)gen.nextDouble());
-
-            if(gen.nextDouble() % 2 == 0.0)
-            {
-                nbHeads++;
-            }
-
-        }
-
-        System.out.println("Prob : " + nbHeads);*/
 
         testGenerator(gen);
 
-        //randomWalker walker = new randomWalker(100, 30, 'U', gen);
-
-        //walker.beginWalk();
 
         guiManager manager = new guiManager();
 
@@ -40,17 +21,6 @@ public class Main {
             }
         });
 
-
-
-        /*SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                manager.drawLine(100,100, manager.LINE_DOWN);
-                manager.drawLine(20,20, manager.LINE_LEFT);
-                manager.drawLine(30,30, manager.LINE_UP);
-                manager.drawLine(40,40, manager.LINE_RIGHT);
-
-            }
-        });*/
 
 
 
