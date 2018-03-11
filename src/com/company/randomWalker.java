@@ -7,7 +7,7 @@ import java.util.Arrays;
 public class randomWalker {
     private char[][] matrix;
     private int nbSteps, nbEffectiveSteps;
-    private int matrixSize;
+    private int[] startPosition, endPosition;
 
     private int height, width;
 
@@ -32,9 +32,6 @@ public class randomWalker {
         }
 
         this.nbSteps = nbSteps;
-
-
-
 
 
         if(mode == 'C' || mode == 'S' || mode == 'U')
@@ -65,9 +62,15 @@ public class randomWalker {
         currentPositionX = this.width / 2;
         currentPositionY = 0;
 
+        startPosition = new int[2];
+        startPosition[0] = currentPositionX;
+        startPosition[1] = currentPositionY;
 
+        endPosition = new int[2];
 
     }
+
+
 
     public char[][] getMatrix()
     {
@@ -87,6 +90,21 @@ public class randomWalker {
     public int getHeight()
     {
         return this.height;
+    }
+
+    public int getNbEffectiveSteps()
+    {
+        return this.nbEffectiveSteps;
+    }
+
+    public void setGenerator(generator gen)
+    {
+        this.gen = gen;
+    }
+
+    public void setNbSteps(int nbSteps)
+    {
+        this.nbSteps = nbSteps;
     }
 
     public void printMatrix()
@@ -151,6 +169,8 @@ public class randomWalker {
             selfAvoidingWalk();
             printMatrix();
         }
+        endPosition[0] = currentPositionX;
+        endPosition[1] = currentPositionY;
 
     }
 
@@ -201,6 +221,7 @@ public class randomWalker {
         }
 
         nbEffectiveSteps = nbSteps;
+
 
     }
 
@@ -334,12 +355,17 @@ public class randomWalker {
         }
 
         str += "\nRequired steps : " + nbSteps + "\n";
-        str += "Simulation ended after : " + nbEffectiveSteps + " steps";
+        str += "Simulation ended after : " + nbEffectiveSteps + " steps\n";
+        str += "End to end path length : " + getEndToEndDistance() + "\n";
 
         return str;
-
-
     }
+
+    public int getEndToEndDistance()
+    {
+        return (Math.abs(endPosition[0] - startPosition[0]) + Math.abs(endPosition[1] - startPosition[1]));
+    }
+
 
 
 }

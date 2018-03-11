@@ -7,6 +7,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 
 public class guiManager {
     private JButton btn_classic;
@@ -18,11 +21,13 @@ public class guiManager {
     private JTextArea txtarea_results;
     private JLabel lbl_simulation;
     private JPanel pnl_main;
+    private JButton btn_simulate;
 
     private BufferedImage image;
-    randomWalker walker;
+    private randomWalker walker;
     private generator gen;
     private int resultNbSteps = 0;
+    private StringBuilder csvResult;
 
     public static int LINE_UP = 0;
     public static int LINE_RIGHT = 1;
@@ -31,13 +36,13 @@ public class guiManager {
 
     public guiManager()
     {
+
         image = new BufferedImage(800, 600, BufferedImage.TYPE_INT_RGB);
 
 
         btn_classic.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("CLICKED ON CLASSIC");
 
                 if(txt_nbSteps.getText().isEmpty() || !isDigitsOnly(txt_nbSteps.getText()))
                 {
@@ -54,8 +59,6 @@ public class guiManager {
 
                     SwingUtilities.invokeLater(new Runnable() {
                         public void run() {
-
-                            printFromActionHistory();
                             txtarea_results.setText(walker.toString());
                             txtarea_results.repaint();
 
@@ -68,7 +71,6 @@ public class guiManager {
         btn_returnless.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("CLICKED ON RETURNLESS");
 
                 if(txt_nbSteps.getText().isEmpty() || !isDigitsOnly(txt_nbSteps.getText()))
                 {
@@ -85,8 +87,6 @@ public class guiManager {
 
                     SwingUtilities.invokeLater(new Runnable() {
                         public void run() {
-
-                            printFromActionHistory();
                             txtarea_results.setText(walker.toString());
                             txtarea_results.repaint();
                         }
@@ -98,7 +98,6 @@ public class guiManager {
         btn_selfAvoiding.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("CLICKED ON SELF-AVOIDING");
 
                 if(txt_nbSteps.getText().isEmpty() || !isDigitsOnly(txt_nbSteps.getText()))
                 {
@@ -115,14 +114,49 @@ public class guiManager {
 
                     SwingUtilities.invokeLater(new Runnable() {
                         public void run() {
-                            printWalkFromMatrix();
-                            //printFromActionHistory();
                             txtarea_results.setText(walker.toString());
                             txtarea_results.repaint();
                         }
                     });
                 }
 
+            }
+        });
+
+        btn_simulate.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                txtarea_results.setText("Simulation iterations of each walk type for different number of steps.\n");
+                resetSimulationScreen();
+                csvResult = new StringBuilder();
+
+                PrintWriter writer = null;
+                try {
+                    writer = new PrintWriter("simulationResult.csv", "UTF-8");
+                } catch (FileNotFoundException e1) {
+                    e1.printStackTrace();
+                } catch (UnsupportedEncodingException e1) {
+                    e1.printStackTrace();
+                }
+
+
+
+                for(int i = 0; i < 50; i++)
+                {
+                    for(int j = 0; j < 10; j++)
+                    {
+                        walker = new randomWalker(i, 80, 60, 'C', new generator(System.currentTimeMillis() + j));
+                        do {
+                            walker.beginWalk();
+                        }while(walker.getNbEffectiveSteps() != i);
+                        //csvResult.append("C, " + i + ", " + walker.getEndToEndDistance() + "\n");
+                        writer.println("C," + i + "," + walker.getEndToEndDistance());
+
+                    }
+                }
+                //System.out.println("\n\n" + csvResult);
+                writer.close();
             }
         });
     }
