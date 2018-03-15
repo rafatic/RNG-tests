@@ -54,7 +54,7 @@ public class randomWalker {
             {
                 Arrays.fill(row, ' ');
             }
-            matrix[currentPositionX][currentPositionY] = '+';
+            //matrix[currentPositionX][currentPositionY] = ' ';
         }
 
         this.gen = gen;
@@ -279,6 +279,12 @@ public class randomWalker {
         boolean correctHeading;
         boolean[] tries = {true, true, true, true};
         boolean stuck = false;
+
+        matrix = new char[this.width][this.height];
+        for (char[] row: matrix)
+        {
+            Arrays.fill(row, ' ');
+        }
 
         while(i < nbSteps && !stuck)
         {

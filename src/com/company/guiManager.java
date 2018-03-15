@@ -55,10 +55,12 @@ public class guiManager {
                     gen = new generator(System.currentTimeMillis());
                     walker = new randomWalker(Integer.parseInt(txt_nbSteps.getText()), 80,60, 'C', gen);
 
+
                     walker.beginWalk();
 
                     SwingUtilities.invokeLater(new Runnable() {
                         public void run() {
+                            printFromActionHistory();
                             txtarea_results.setText(walker.toString());
                             txtarea_results.repaint();
 
@@ -87,6 +89,7 @@ public class guiManager {
 
                     SwingUtilities.invokeLater(new Runnable() {
                         public void run() {
+                            printFromActionHistory();
                             txtarea_results.setText(walker.toString());
                             txtarea_results.repaint();
                         }
@@ -114,6 +117,7 @@ public class guiManager {
 
                     SwingUtilities.invokeLater(new Runnable() {
                         public void run() {
+                            printWalkFromMatrix();
                             txtarea_results.setText(walker.toString());
                             txtarea_results.repaint();
                         }
@@ -140,9 +144,10 @@ public class guiManager {
                     e1.printStackTrace();
                 }
 
+                randomWalker classicWalker, returnLessWalker, selfAvoidingWalker;
 
 
-                for(int i = 0; i < 50; i++)
+                /*for(int i = 0; i < 50; i++)
                 {
                     for(int j = 0; j < 10; j++)
                     {
@@ -154,8 +159,48 @@ public class guiManager {
                         writer.println("C," + i + "," + walker.getEndToEndDistance());
 
                     }
-                }
+                }*/
                 //System.out.println("\n\n" + csvResult);
+
+                double[] meanClassicLength = new double[100];
+                double[] meanReturnLessLength = new double[100];
+                double[] meanSelfAvoidingLength = new double[100];
+                int nbSelfAvoidingTries;
+                for(int i = 0; i < 100; i++)
+                {
+                    for(int j = 0; j < 100; j++)
+                    {
+                        classicWalker = new randomWalker(i, 80, 60, 'C', new generator(System.currentTimeMillis() + j));
+                        returnLessWalker = new randomWalker(i, 80, 60, 'S', new generator(System.currentTimeMillis() + j + 1));
+                        selfAvoidingWalker = new randomWalker(i, 80, 60, 'U', new generator(System.currentTimeMillis() + j + 2));
+                        do {
+                            classicWalker.beginWalk();
+                        }while(classicWalker.getNbEffectiveSteps() != i);
+
+                        do {
+                            returnLessWalker.beginWalk();
+                        }while(returnLessWalker.getNbEffectiveSteps() != i);
+
+                        nbSelfAvoidingTries = 0;
+                        do {
+                            selfAvoidingWalker.beginWalk();
+                            nbSelfAvoidingTries++;
+                        }while(selfAvoidingWalker.getNbEffectiveSteps() != i);
+
+                        meanClassicLength[i] += classicWalker.getEndToEndDistance();
+                        meanReturnLessLength[i] += returnLessWalker.getEndToEndDistance();
+                        meanSelfAvoidingLength[i] += selfAvoidingWalker.getEndToEndDistance();
+                    }
+
+                    meanClassicLength[i] /= 100;
+                    meanReturnLessLength[i] /= 100;
+                    meanSelfAvoidingLength[i] /= 100;
+                }
+                writer.println("steps,Classic,ReturnLess,SelfAvoiding");
+                for(int i = 0; i < 100; i++)
+                {
+                    writer.println(i +"," + (meanClassicLength[i] * meanClassicLength[i]) + "," + (meanReturnLessLength[i] * meanReturnLessLength[i]) + "," + (meanSelfAvoidingLength[i] * meanSelfAvoidingLength[i]));
+                }
                 writer.close();
             }
         });
