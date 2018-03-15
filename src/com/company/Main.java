@@ -25,7 +25,7 @@ public class Main {
 
 
     }
-
+    // Throws a coin 10 000 times, used to determine quickly if the random number generator is fair
     public static void testGenerator(generator gen)
     {
         int[] lancers = new int[4];

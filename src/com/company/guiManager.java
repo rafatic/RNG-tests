@@ -147,20 +147,6 @@ public class guiManager {
                 randomWalker classicWalker, returnLessWalker, selfAvoidingWalker;
 
 
-                /*for(int i = 0; i < 50; i++)
-                {
-                    for(int j = 0; j < 10; j++)
-                    {
-                        walker = new randomWalker(i, 80, 60, 'C', new generator(System.currentTimeMillis() + j));
-                        do {
-                            walker.beginWalk();
-                        }while(walker.getNbEffectiveSteps() != i);
-                        //csvResult.append("C, " + i + ", " + walker.getEndToEndDistance() + "\n");
-                        writer.println("C," + i + "," + walker.getEndToEndDistance());
-
-                    }
-                }*/
-                //System.out.println("\n\n" + csvResult);
 
                 double[] meanClassicLength = new double[100];
                 double[] meanReturnLessLength = new double[100];

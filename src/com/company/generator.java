@@ -15,7 +15,7 @@ public class generator {
     {
         x1 = x2 = x3 = y1 = y2 = y3 = seed;
     }
-
+    // Reproduit le fonctionnement du générateur à double congruence linéaire "MRG32k3a"
     public double nextDouble()
     {
         int k;
