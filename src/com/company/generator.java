@@ -6,6 +6,7 @@ public class generator {
     //private double norm = 2.328306549295728e-10;
     private double norm = 1;
 
+    // Default constructor, initializes the seed to '12345'
     public generator()
     {
         x1 = x2 = x3 = y1 = y2 = y3 = 12345L;

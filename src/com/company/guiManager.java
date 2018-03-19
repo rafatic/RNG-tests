@@ -36,14 +36,17 @@ public class guiManager {
 
     public guiManager()
     {
-
+        // The simulation screen is a 800x600 image. The simulation itself is done in a 80x60 matrix.
+        // The path is printed on a 10x resolution in the image
         image = new BufferedImage(800, 600, BufferedImage.TYPE_INT_RGB);
 
 
+        // Listener fired when the button "classic walk" is clicked
         btn_classic.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                // Checks if a number of steps has been input
                 if(txt_nbSteps.getText().isEmpty() || !isDigitsOnly(txt_nbSteps.getText()))
                 {
                     txtarea_results.append("\nERROR : Please type the number of steps to execute in the simulation !" + txt_nbSteps.getText());
@@ -52,12 +55,15 @@ public class guiManager {
                 else
                 {
                     resetSimulationScreen();
+                    // We use the current system time as a seed
                     gen = new generator(System.currentTimeMillis());
+
+
                     walker = new randomWalker(Integer.parseInt(txt_nbSteps.getText()), 80,60, 'C', gen);
-
-
+                    // Start the walk using the mode specified in the constructor
                     walker.beginWalk();
 
+                    // Once the walk is finished, print the result (draw the path + write results in the console)
                     SwingUtilities.invokeLater(new Runnable() {
                         public void run() {
                             printFromActionHistory();
@@ -70,10 +76,11 @@ public class guiManager {
             }
         });
 
+        // Listener fired when the button "returnless walk" is clicked
         btn_returnless.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                // Checks if a number of steps has been input
                 if(txt_nbSteps.getText().isEmpty() || !isDigitsOnly(txt_nbSteps.getText()))
                 {
                     txtarea_results.append("\nERROR : Please type the number of steps to execute in the simulation !" + txt_nbSteps.getText());
@@ -82,11 +89,13 @@ public class guiManager {
                 else
                 {
                     resetSimulationScreen();
+                    // We use the current system time as a seed
                     gen = new generator(System.currentTimeMillis());
                     walker = new randomWalker(Integer.parseInt(txt_nbSteps.getText()), 80,60, 'S', gen);
-
+                    // Start the walk using the mode specified in the constructor
                     walker.beginWalk();
 
+                    // Once the walk is finished, print the result (draw the path + write results in the console)
                     SwingUtilities.invokeLater(new Runnable() {
                         public void run() {
                             printFromActionHistory();
@@ -98,10 +107,11 @@ public class guiManager {
             }
         });
 
+        // Listener fired when the button "self avoiding walk" is clicked
         btn_selfAvoiding.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                // Checks if a number of steps has been input
                 if(txt_nbSteps.getText().isEmpty() || !isDigitsOnly(txt_nbSteps.getText()))
                 {
                     txtarea_results.append("\nERROR : Please type the number of steps to execute in the simulation !" + txt_nbSteps.getText());
@@ -110,11 +120,12 @@ public class guiManager {
                 else
                 {
                     resetSimulationScreen();
+                    // We use the current system time as a seed
                     gen = new generator(System.currentTimeMillis());
                     walker = new randomWalker(Integer.parseInt(txt_nbSteps.getText()), 80,60, 'U', gen);
-
+                    // Start the walk using the mode specified in the constructor
                     walker.beginWalk();
-
+                    // Once the walk is finished, print the result (draw the path + write results in the console)
                     SwingUtilities.invokeLater(new Runnable() {
                         public void run() {
                             printWalkFromMatrix();
@@ -127,14 +138,17 @@ public class guiManager {
             }
         });
 
+        // Listener fired when the button "simulate" is clicked
         btn_simulate.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                // This procedure will simulate a hundred walks of each type for a number of steps (from 1 to 100)
+                // The mean squared result of each simulation is then written to a file in a csv format
                 txtarea_results.setText("Simulation iterations of each walk type for different number of steps.\n");
                 resetSimulationScreen();
                 csvResult = new StringBuilder();
 
+                // Opens / creates the file where the results will be written to.
                 PrintWriter writer = null;
                 try {
                     writer = new PrintWriter("simulationResult.csv", "UTF-8");
@@ -144,6 +158,8 @@ public class guiManager {
                     e1.printStackTrace();
                 }
 
+                // We use a different randomWalker object for each walk mode.
+                // Each object is set to walk in a given mode.
                 randomWalker classicWalker, returnLessWalker, selfAvoidingWalker;
 
 
@@ -151,14 +167,18 @@ public class guiManager {
                 double[] meanClassicLength = new double[100];
                 double[] meanReturnLessLength = new double[100];
                 double[] meanSelfAvoidingLength = new double[100];
-                int nbSelfAvoidingTries;
                 for(int i = 0; i < 100; i++)
                 {
                     for(int j = 0; j < 100; j++)
                     {
+                        // each simulation uses a differently seeded random generator
                         classicWalker = new randomWalker(i, 80, 60, 'C', new generator(System.currentTimeMillis() + j));
                         returnLessWalker = new randomWalker(i, 80, 60, 'S', new generator(System.currentTimeMillis() + j + 1));
                         selfAvoidingWalker = new randomWalker(i, 80, 60, 'U', new generator(System.currentTimeMillis() + j + 2));
+
+                        // We try different walks until one is fully simulated
+                        // If the walk is stuck, another is initiated
+                        // this should not happen for classic and returnless walks, but will surely happen for selfAvoiding walks
                         do {
                             classicWalker.beginWalk();
                         }while(classicWalker.getNbEffectiveSteps() != i);
@@ -167,21 +187,22 @@ public class guiManager {
                             returnLessWalker.beginWalk();
                         }while(returnLessWalker.getNbEffectiveSteps() != i);
 
-                        nbSelfAvoidingTries = 0;
                         do {
                             selfAvoidingWalker.beginWalk();
-                            nbSelfAvoidingTries++;
                         }while(selfAvoidingWalker.getNbEffectiveSteps() != i);
+
 
                         meanClassicLength[i] += classicWalker.getEndToEndDistance();
                         meanReturnLessLength[i] += returnLessWalker.getEndToEndDistance();
                         meanSelfAvoidingLength[i] += selfAvoidingWalker.getEndToEndDistance();
                     }
-
+                    // Once a hundred simulations for a given number of steps are done, we compute the mean distance.
                     meanClassicLength[i] /= 100;
                     meanReturnLessLength[i] /= 100;
                     meanSelfAvoidingLength[i] /= 100;
                 }
+
+                // at the end of the simulation, we output the squared mean end-to-end distances of each walks.
                 writer.println("steps,Classic,ReturnLess,SelfAvoiding");
                 for(int i = 0; i < 100; i++)
                 {
@@ -192,11 +213,7 @@ public class guiManager {
         });
     }
 
-    public BufferedImage getImage()
-    {
-        return this.image;
-    }
-
+    // Creates and shows the GUI form.
     public void createAndShowGUI()
     {
         JFrame frm = new JFrame("frame");
@@ -220,6 +237,7 @@ public class guiManager {
         frm.setVisible(true);
     }
 
+    // This function draws lines in a given direction to the bufferedImage showed in the GUI form
     public void drawLine(int x, int y, int direction) {
 
         if(direction == LINE_UP)
@@ -255,6 +273,9 @@ public class guiManager {
 
     }
 
+    // Prints the full walk using an arrayList of actions
+    // the list used is the actionsHistory from the current randomWalker object
+    // Used to print classic walks and returnless walks
     private void printFromActionHistory()
     {
         for(action a: walker.actionsHistory)
@@ -281,6 +302,9 @@ public class guiManager {
 
     }
 
+    // Prints the full walk using a matrix containing the simulation result
+    // The matrix used is the matrix from the current walker object
+    // Used to print self avoiding walks
     private void printWalkFromMatrix()
     {
 
@@ -308,6 +332,7 @@ public class guiManager {
         }
     }
 
+    // Clears the GUI form's image and console.
     private void resetSimulationScreen()
     {
         for(int y =0; y < image.getHeight(); y++)
@@ -322,6 +347,7 @@ public class guiManager {
     }
 
 
+    // Used to check if the field "txt_nbSteps" only contains digits
     private boolean isDigitsOnly(CharSequence str) {
         final int len = str.length();
         for (int i = 0; i < len; i++) {
