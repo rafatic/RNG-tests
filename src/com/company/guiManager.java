@@ -169,7 +169,7 @@ public class guiManager {
                 double[] meanSelfAvoidingLength = new double[100];
                 for(int i = 0; i < 100; i++)
                 {
-                    for(int j = 0; j < 100; j++)
+                    for(int j = 0; j < 500; j++)
                     {
                         // each simulation uses a differently seeded random generator
                         classicWalker = new randomWalker(i, 80, 60, 'C', new generator(System.currentTimeMillis() + j));
@@ -192,9 +192,9 @@ public class guiManager {
                         }while(selfAvoidingWalker.getNbEffectiveSteps() != i);
 
 
-                        meanClassicLength[i] += classicWalker.getEndToEndDistance();
-                        meanReturnLessLength[i] += returnLessWalker.getEndToEndDistance();
-                        meanSelfAvoidingLength[i] += selfAvoidingWalker.getEndToEndDistance();
+                        meanClassicLength[i] += (classicWalker.getEndToEndDistance() * classicWalker.getEndToEndDistance());
+                        meanReturnLessLength[i] += (returnLessWalker.getEndToEndDistance() * returnLessWalker.getEndToEndDistance());
+                        meanSelfAvoidingLength[i] += (selfAvoidingWalker.getEndToEndDistance() * selfAvoidingWalker.getEndToEndDistance());
                     }
                     // Once a hundred simulations for a given number of steps are done, we compute the mean distance.
                     meanClassicLength[i] /= 100;
@@ -206,7 +206,7 @@ public class guiManager {
                 writer.println("steps,Classic,ReturnLess,SelfAvoiding");
                 for(int i = 0; i < 100; i++)
                 {
-                    writer.println(i +"," + (meanClassicLength[i] * meanClassicLength[i]) + "," + (meanReturnLessLength[i] * meanReturnLessLength[i]) + "," + (meanSelfAvoidingLength[i] * meanSelfAvoidingLength[i]));
+                    writer.println(i +"," + meanClassicLength[i] + "," + meanReturnLessLength[i] + "," + meanSelfAvoidingLength[i]);
                 }
                 writer.close();
             }
