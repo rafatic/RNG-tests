@@ -1,10 +1,12 @@
 package com.company.test;
 
 /**
- *
- * @author Benjamin
+ * Classe pour gérer les valeurs de Khi2
  */
-public class ValeursKhi2 {    
+public class ValeursKhi2 {
+    /**
+     * Valeur des Khi2 en fonction du risque et des degrés de liberté
+     */
     private final double[][] valeurKhi2 = {
         { 0.004, 0.02, 0.06, 0.15, 0.46,  1.07,  1.64,  2.71,  3.84,  6.63, 10.83 }, //  1 degré liberté
         {  0.10, 0.21, 0.45, 0.71, 1.39,  2.41,  3.22,  4.61,  5.99,  9.21, 13.82 }, //  2 degrés liberté
@@ -23,18 +25,40 @@ public class ValeursKhi2 {
         {  7.26, 8.55, 10.3, 11.7, 14.3,  17.3,  19.3,  22.3,  25.0,  30.6,  37.7 }  // 15 degrés liberté
     };
     
+    /**
+     * Valeurs du risque
+     */
     private final double[] alphaValue = {
         0.95, 0.9, 0.8, 0.7, 0.5, 0.3, 0.2, 0.1, 0.05, 0.01, 0.001
     };
     
+    /**
+     * Récupère la valeur du Khi2 en fonction du degré de liberté et du risque
+     * 
+     * @param degreLiberte Le degré de liberté de notre série de données
+     * @param indiceAlpha L'indice du tableau correspondant au risque choisit
+     * @return La valeur du Khi2 correspondante
+     */
     public double getKhi2Value(int degreLiberte, int indiceAlpha) {
         return this.valeurKhi2[degreLiberte-1][indiceAlpha];
     }
     
+    /**
+     * Récupère le risque en fonction d'un indice du tableau
+     * 
+     * @param indiceAlpha Un indice du tableau des valeurs du risque
+     * @return La valeur de ce risque
+     */
     public double getAlpha(int indiceAlpha) {
         return this.alphaValue[indiceAlpha];
     }
     
+    /**
+     * Retourne la taille du tableau de risque qui correspond au
+     * nombre de risques dont les valeurs du Khi2 ont été défini
+     * 
+     * @return La taille du tableau des risques
+     */
     public int getArraySize() {
         return this.alphaValue.length;
     }
