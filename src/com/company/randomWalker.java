@@ -206,7 +206,8 @@ public class randomWalker {
         {
             do{
                 correctHeading = true;
-                heading = (int)(gen.nextDouble() % 4);
+                heading = (int)(gen.nextDouble() * 4) % 4;
+
 
 
                 // each time the walk moves, we store the action in the history
@@ -261,7 +262,8 @@ public class randomWalker {
         {
             do{
                 correctHeading = true;
-                heading = (int)(gen.nextDouble() % 4);
+                //heading = (int)(gen.nextDouble() % 4);
+                heading = (int)(gen.nextDouble() * 4) % 4;
 
                 if(heading == 0 && currentPositionY > 0 && lastHeading != 2)
                 {
@@ -322,7 +324,8 @@ public class randomWalker {
             tries = new boolean[]{true, true, true, true};
             do{
                 correctHeading = true;
-                heading = (int)(gen.nextDouble() % 4);
+                //heading = (int)(gen.nextDouble() % 4);
+                heading = (int)(gen.nextDouble() * 4) % 4;
 
                 if(heading == 0 && currentPositionY > 0 && matrix[currentPositionX][currentPositionY - 1] == ' ')
                 {

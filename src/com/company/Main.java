@@ -32,7 +32,9 @@ public class Main {
 
         for(int i = 0; i < 10000; i++)
         {
-            lancers[(int)((gen.nextDouble() % 4))]++;
+            //lancers[(int)((gen.nextDouble() % 4))]++;
+            //int dice1 = (int) (gen.nextDouble() * 6) % 6;
+            lancers[(int)(gen.nextDouble() * 4) % 4]++;
         }
 
         for(int i = 0; i <4; i++)
