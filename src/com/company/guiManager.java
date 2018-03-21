@@ -2,6 +2,8 @@ package com.company;
 
 
 
+import com.company.test.Khi2;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -17,11 +19,12 @@ public class guiManager {
     private JButton btn_returnless;
     private JTextField txt_nbSteps;
     private JLabel lbl_nbSteps;
-    private JPanel pnl_result;
     private JTextArea txtarea_results;
     private JLabel lbl_simulation;
     private JPanel pnl_main;
     private JButton btn_simulate;
+    private JButton btn_khi;
+    private JScrollPane scrollPane_consoleScroller;
 
     private BufferedImage image;
     private randomWalker walker;
@@ -138,14 +141,18 @@ public class guiManager {
             }
         });
 
+
+
         // Listener fired when the button "simulate" is clicked
         btn_simulate.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // This procedure will simulate a hundred walks of each type for a number of steps (from 1 to 100)
                 // The mean squared result of each simulation is then written to a file in a csv format
-                txtarea_results.setText("Simulation iterations of each walk type for different number of steps.\n");
+
                 resetSimulationScreen();
+                txtarea_results.setText("Simulating iterations of each walk type for different number of steps.\n\n");
+
                 csvResult = new StringBuilder();
 
                 // Opens / creates the file where the results will be written to.
@@ -169,7 +176,7 @@ public class guiManager {
                 double[] meanSelfAvoidingLength = new double[100];
                 for(int i = 0; i < 100; i++)
                 {
-                    for(int j = 0; j < 500; j++)
+                    for(int j = 0; j < 100; j++)
                     {
                         // each simulation uses a differently seeded random generator
                         classicWalker = new randomWalker(i, 80, 60, 'C', new generator(System.currentTimeMillis() + j));
@@ -204,13 +211,29 @@ public class guiManager {
 
                 // at the end of the simulation, we output the squared mean end-to-end distances of each walks.
                 writer.println("steps,Classic,ReturnLess,SelfAvoiding");
+
+                txtarea_results.append("Mean squared distance of each walk for any number of steps (csv format)\n\n");
+                txtarea_results.append("steps,Classic,ReturnLess,SelfAvoiding\n");
                 for(int i = 0; i < 100; i++)
                 {
                     writer.println(i +"," + meanClassicLength[i] + "," + meanReturnLessLength[i] + "," + meanSelfAvoidingLength[i]);
+                    txtarea_results.append(i +"," + meanClassicLength[i] + "," + meanReturnLessLength[i] + "," + meanSelfAvoidingLength[i] +" \n");
                 }
+                txtarea_results.append("\n\nThe following results are available in the file \"simulationResults.csv\" in the .jar path\n");
                 writer.close();
             }
         });
+
+        btn_khi.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Khi2.main(null);
+                txtarea_results.setText(Khi2.getResult());
+                txtarea_results.repaint();
+            }
+        });
+
+
     }
 
     // Creates and shows the GUI form.
@@ -229,8 +252,7 @@ public class guiManager {
                 image.setRGB(x, y, Color.LIGHT_GRAY.getRGB());
             }
         }
-
-
+        scrollPane_consoleScroller.setViewportView(txtarea_results);
         frm.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frm.setLocationByPlatform(true);
         frm.pack();

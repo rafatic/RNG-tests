@@ -30,6 +30,8 @@ public class Khi2 {
         1.0 / 12.0, // 10
         1.0 / 12.0  // 11 et 12
     };
+
+    private static String testResult;
     
     /**
      * Fonction de départ
@@ -37,11 +39,17 @@ public class Khi2 {
      * @param args Les arguments donnés en ligne de commande
      */
     public static void main(String[] args) {
+        testResult = "";
         double[] nombreLancers = lancer();
         double[] nombreAttendu = lancerAttendu();
         
         display(nombreLancers, nombreAttendu);
         testAdequation(nombreLancers, nombreAttendu);
+    }
+
+    public static String getResult()
+    {
+        return testResult;
     }
     
     /**
@@ -52,28 +60,41 @@ public class Khi2 {
      * @param nombreAttendu Nombre de fois qu'on devrait obtenir certaines valeurs
      */
     public static void display(double[] nombreLancers, double[] nombreAttendu) {
+
+
         System.out.println("Nombre d'itérations : " + ITERATIONS);
         System.out.println("        +-------------------+------------------+");
         System.out.println("        | Lancers effectués | Lancers attendus |");
         System.out.println("+-------+-------------------+------------------+");
-        
+
+
+        testResult += "Nombre d'itérations : " + ITERATIONS + "\n";
+        testResult += "+------------+--------------------------+------------------------+\n";
+        testResult += "                    | Lancers effectués | Lancers attendus |\n";
+        testResult += "+------------+--------------------------+------------------------+\n";
+
         for (int i=0; i < K; i++) {
             switch (i) {
                 case 0:
                     System.out.print("|   2-3 | ");
+                    testResult += "|     2-3     | ";
                     break;
                 case K-1:
                     System.out.print("| 11-12 | ");
+                    testResult += "|    11-12   | ";
                     break;
                 default:
                     System.out.format("| %5d | ", i+4);
+                    testResult += String.format("|     %5d     | ", i+4);
                     break;
             }
             
             System.out.format("%17.0f | %16.0f |%n", nombreLancers[i], nombreAttendu[i]);
+            testResult += String.format("%17.0f                 | %16.0f            |%n", nombreLancers[i], nombreAttendu[i]);
         }
         
         System.out.println("+-------+-------------------+------------------+\n");
+        testResult += "+------------+--------------------------+------------------------+\n";
     }
     
     /**
@@ -91,16 +112,29 @@ public class Khi2 {
         }
         
         System.out.format("T = %.3f%n", T);
+        testResult += String.format("T = %.3f%n", T);
+
         System.out.println("Test du Khi2 avec un risque à 5%");
+        testResult += "Test du Khi2 avec un risque à 5%\n";
+
         System.out.println("    H0: Les dés ne sont pas truqués");
+        testResult += "    H0: Les dés ne sont pas truqués\n";
+
         System.out.println("    H1: Les dés sont truqués");
+        testResult += "    H1: Les dés sont truqués\n";
+
         System.out.format("TEST: P(T < " + valeursKhi2.getKhi2Value(K-1, 8) + ") = %.3f%n", (1-valeursKhi2.getAlpha(8)));
+        testResult += String.format("TEST: P(T < " + valeursKhi2.getKhi2Value(K-1, 8) + ") = %.3f%n", (1-valeursKhi2.getAlpha(8)));
+
         System.out.format("    %.3f < " + valeursKhi2.getKhi2Value(K-1, 8) +" : ", T);
-        
+        testResult += String.format("    %.3f < " + valeursKhi2.getKhi2Value(K-1, 8) +" : ", T);
+
         if (T < valeursKhi2.getKhi2Value(K-1, 8)) {
             System.out.println("VRAI. L'hypothèse H0 est vérifié, les dés ne sont pas truqués");
+            testResult += "VRAI. L'hypothèse H0 est vérifié, les dés ne sont pas truqués\n";
         } else {
             System.out.println("FAUX. L'hypothèse H1 est vérifié, les dés sont truqués");
+            testResult += "FAUX. L'hypothèse H1 est vérifié, les dés sont truqués\n";
         }
     }
     
