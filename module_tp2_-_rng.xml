@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_tp2_-_rng" default="compile.module.tp2_-_rng">
+  <dirname property="module.tp2_-_rng.basedir" file="${ant.file.module_tp2_-_rng}"/>
+  
+  <property name="module.jdk.home.tp2_-_rng" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.tp2_-_rng" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.tp2_-_rng" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.tp2_-_rng" value="-encoding UTF-8 -source 1.8 -target 1.8 ${compiler.args}"/>
+  
+  <property name="tp2_-_rng.output.dir" value="${module.tp2_-_rng.basedir}/out/production/TP2 -  RNG"/>
+  <property name="tp2_-_rng.testoutput.dir" value="${module.tp2_-_rng.basedir}/out/test/TP2 -  RNG"/>
+  
+  <path id="tp2_-_rng.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="tp2_-_rng.module.production.classpath">
+    <path refid="${module.jdk.classpath.tp2_-_rng}"/>
+  </path>
+  
+  <path id="tp2_-_rng.runtime.production.module.classpath">
+    <pathelement location="${tp2_-_rng.output.dir}"/>
+  </path>
+  
+  <path id="tp2_-_rng.module.classpath">
+    <path refid="${module.jdk.classpath.tp2_-_rng}"/>
+    <pathelement location="${tp2_-_rng.output.dir}"/>
+  </path>
+  
+  <path id="tp2_-_rng.runtime.module.classpath">
+    <pathelement location="${tp2_-_rng.testoutput.dir}"/>
+    <pathelement location="${tp2_-_rng.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.tp2_-_rng">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.tp2_-_rng">
+    <patternset refid="excluded.from.module.tp2_-_rng"/>
+  </patternset>
+  
+  <path id="tp2_-_rng.module.sourcepath">
+    <dirset dir="${module.tp2_-_rng.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.tp2_-_rng" depends="compile.module.tp2_-_rng.production,compile.module.tp2_-_rng.tests" description="Compile module TP2 -  RNG"/>
+  
+  <target name="compile.module.tp2_-_rng.production" depends="register.custom.compilers" description="Compile module TP2 -  RNG; production classes">
+    <mkdir dir="${tp2_-_rng.output.dir}"/>
+    <javac2 destdir="${tp2_-_rng.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.tp2_-_rng}/javac">
+      <compilerarg line="${compiler.args.tp2_-_rng}"/>
+      <bootclasspath refid="tp2_-_rng.module.bootclasspath"/>
+      <classpath refid="tp2_-_rng.module.production.classpath"/>
+      <src refid="tp2_-_rng.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.tp2_-_rng"/>
+    </javac2>
+    
+    <copy todir="${tp2_-_rng.output.dir}">
+      <fileset dir="${module.tp2_-_rng.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.tp2_-_rng.tests" depends="register.custom.compilers,compile.module.tp2_-_rng.production" description="compile module TP2 -  RNG; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.tp2_-_rng" description="cleanup module">
+    <delete dir="${tp2_-_rng.output.dir}"/>
+    <delete dir="${tp2_-_rng.testoutput.dir}"/>
+  </target>
+</project>
