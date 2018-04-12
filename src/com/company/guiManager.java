@@ -1,7 +1,5 @@
 package com.company;
 
-
-
 import com.company.test.Khi2;
 
 import javax.swing.*;
@@ -204,9 +202,9 @@ public class guiManager {
                         meanSelfAvoidingLength[i] += (selfAvoidingWalker.getEndToEndDistance() * selfAvoidingWalker.getEndToEndDistance());
                     }
                     // Once a hundred simulations for a given number of steps are done, we compute the mean distance.
-                    meanClassicLength[i] /= 100;
-                    meanReturnLessLength[i] /= 100;
-                    meanSelfAvoidingLength[i] /= 100;
+                    meanClassicLength[i] /= 1000;
+                    meanReturnLessLength[i] /= 1000;
+                    meanSelfAvoidingLength[i] /= 1000;
                 }
 
                 // at the end of the simulation, we output the squared mean end-to-end distances of each walks.
